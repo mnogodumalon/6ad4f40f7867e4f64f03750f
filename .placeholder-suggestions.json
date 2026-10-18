@@ -1,0 +1,86 @@
+{
+  "VorhabenDialog.tsx": {
+    "titel": "z. B. CRM-Migration 2026",
+    "intention": "Was soll erreicht werden?",
+    "startdatum": "Wann startet das Vorhaben?",
+    "enddatum": "Wann wurde es abgeschlossen?",
+    "kontext": "Wie ist die Ausgangslage?",
+    "beteiligte_rollen": "Eine Rolle pro Zeile",
+    "verwendete_systeme": "Ein System pro Zeile",
+    "informationsquellen": "Eine Quelle pro Zeile",
+    "arbeit": "Was wurde konkret getan?",
+    "entscheidung": "Was wurde entschieden?",
+    "entscheidung_durch": "z. B. Lenkungskreis",
+    "ergebnis": "Was kam am Ende heraus?",
+    "wirkung": "Welche Wirkung hatte es?",
+    "erfahrung": "Was wurde daraus gelernt?"
+  },
+  "BeobachtungenDialog.tsx": {
+    "vorhaben": "Welches Vorhaben?",
+    "beschreibung": "Was genau ist passiert?",
+    "beobachtet_am": "Wann ist es aufgefallen?",
+    "quelle": "z. B. Kundengespräch",
+    "betroffene_objekte": "Ein Objekt pro Zeile",
+    "fallart": "z. B. Fehlende Angaben, Ausnahme",
+    "beobachtet_von": "z. B. Anna Müller"
+  },
+  "ErkenntnisseDialog.tsx": {
+    "widersprechende_erkenntnis": "Welche Erkenntnis widerspricht?",
+    "titel": "z. B. Kurze Meetings sparen Zeit",
+    "stufe": "z. B. Hypothese, Erfahrung",
+    "hypothese": "Was vermuten Sie?",
+    "alternativerklaerungen": "Welche anderen Erklärungen gibt es?",
+    "pruefung": "Wie wurde geprüft?",
+    "schlussfolgerung": "Was folgt daraus?",
+    "gueltigkeitsbereich": "Wann gilt das?",
+    "unsicherheiten": "Was ist noch unklar?",
+    "freigegeben_von": "z. B. Anna Schmidt",
+    "letzte_pruefung": "Wann wurde zuletzt geprüft?",
+    "naechste_pruefung": "Wann ist die nächste Prüfung?",
+    "widerspruch_notiz": "Worin liegt der Widerspruch?"
+  },
+  "BelegeDialog.tsx": {
+    "beobachtung": "Welche Beobachtung?",
+    "begruendung": "Warum stützt oder widerlegt sie?",
+    "geprueft_von": "z. B. Anna Schmidt",
+    "geprueft_am": "Wann wurde geprüft?",
+    "erkenntnis": "Welche Erkenntnis?"
+  },
+  "RegelnDialog.tsx": {
+    "regeltitel": "z. B. Vier-Augen-Prinzip",
+    "regeltext": "Was genau gilt?",
+    "version": "z. B. 1.0",
+    "gueltigkeitsbereich": "Wo gilt die Regel?",
+    "ausnahmeregelung": "Welche Ausnahmen sind erlaubt?",
+    "verantwortlicher": "z. B. Anna Schmidt",
+    "freigabestatus": "z. B. Entwurf, Freigegeben",
+    "freigegeben_von": "z. B. Max Mustermann",
+    "gueltig_ab": "Ab wann gilt die Regel?",
+    "aenderungsgrund": "Warum wurde sie geändert?",
+    "ruecknahmegrund": "Warum zurückgenommen?",
+    "letzte_pruefung": "Wann zuletzt geprüft?",
+    "naechste_pruefung": "Wann ist die nächste Prüfung?",
+    "erkenntnis": "Welche Erkenntnis?"
+  },
+  "RegelanwendungenDialog.tsx": {
+    "regel": "Welche Regel?",
+    "vorhaben": "Welches Vorhaben?",
+    "angewendet_am": "Wann wurde sie angewendet?",
+    "ergebnis": "Was kam dabei heraus?",
+    "nebenwirkungen": "Welche Nebenwirkungen traten auf?",
+    "wirkungsbewertung": "Wie wirkte die Regel?",
+    "bewertet_von": "z. B. Anna Müller"
+  },
+  "PilotbewertungenDialog.tsx": {
+    "regel": "Welche Regel ist betroffen?",
+    "vorhaben": "Welches Vorhaben?",
+    "bewertet_am": "Wann wurde bewertet?",
+    "problem_reduziert": "Was hat sich verbessert?",
+    "qualitaetsveraenderung": "Was hat sich in der Qualität geändert?",
+    "zusatzaufwand": "Welcher Mehraufwand entstand?",
+    "akzeptanz": "Wie reagierte das Team?",
+    "wiederverwendbar": "Eine Komponente pro Zeile",
+    "voraussetzungen": "Was wird benötigt?",
+    "entscheidungsbegruendung": "Warum diese Entscheidung?"
+  }
+}

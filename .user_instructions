@@ -1,0 +1,170 @@
+Erstelle eine Anwendung, die die nachfolgenden Anforderungen erfüllt.
+
+Ein Vorhaben lässt sich als fortlaufender Zusammenhang betrachten:
+
+Intention → Kontext → Arbeit → Entscheidung → Wirkung → Erfahrung.
+
+Die einzelnen Schritte hängen voneinander ab.
+
+Für die Wiederverwendung muss geklärt werden:
+
+* Was wurde tatsächlich beobachtet?
+* Was wurde daraus geschlossen?
+* Welche Belege stützen die Schlussfolgerung?
+* Welche Alternativerklärungen gibt es?
+* Unter welchen Bedingungen gilt die Erkenntnis?
+* Welche Unsicherheiten bleiben?
+* Wann wurde sie zuletzt überprüft?
+* Was geschah bei einer späteren Anwendung?
+
+Von der Beobachtung zur belastbaren Regel
+
+KLAR sollte die unterschiedlichen Stufen des Erkenntnisprozesses auseinanderhalten.
+
+Beobachtung: Was ist geschehen?
+
+Beispiel: Bei mehreren Aufträgen fehlte eine bestimmte technische Angabe.
+
+Hypothese: Welche Erklärung könnte das Muster haben?
+
+Beispiel: Die betreffende Anforderung wird bei bestimmten Produktvarianten regelmäßig übersehen.
+
+Prüfung: Welche Belege sprechen dafür oder dagegen?
+
+Beispiel: Die Fälle werden mit anderen Produktvarianten und vollständigen Aufträgen verglichen.
+
+Erfahrung: Welche Schlussfolgerung ist durch die bisherigen Fälle gestützt?
+
+Beispiel: Bei einer bestimmten Variantenkonstellation sollte die Angabe ausdrücklich geprüft werden.
+
+Regel: Welche verbindliche Vorgabe soll gelten?
+
+Beispiel: Eine Freigabe darf erst erfolgen, wenn die erforderliche Angabe vorliegt oder eine autorisierte Ausnahme dokumentiert wurde.
+
+Anwendung: Wie wird die Regel im nächsten Vorhaben berücksichtigt?
+
+Wirkungsprüfung: Hat die Regel geholfen, Fehler oder Verzögerungen zu reduzieren? Hat sie unerwünschte Nebenwirkungen erzeugt?
+
+
+
+Eine wiederverwendbare Erkenntnis muss nachvollziehbar mit ihren Ursprungsfällen verbunden bleiben, dazu gehören, soweit relevant:
+
+* Quelle und Zeitpunkt,
+* betroffene Objekte oder Produktvarianten,
+* ursprüngliche Beobachtungen,
+* getroffene Entscheidungen,
+* tatsächliche Ergebnisse,
+* bestätigende oder widersprechende Fälle,
+* Gültigkeitsbereich,
+* Unsicherheit,
+* Freigabestatus,
+* spätere Überprüfung.
+
+
+Ein System, das Erfahrung nutzbar machen soll, braucht Mechanismen für:
+
+* Überprüfung,
+* Aktualisierung,
+* Einschränkung des Gültigkeitsbereichs,
+* Kennzeichnung als überholt,
+* Rücknahme einer Regel,
+* Dokumentation widersprüchlicher Erkenntnisse.
+
+
+Die strategische Architekturidee der Anwendung lässt sich in vier Bereiche gliedern.
+
+1. Interpretation
+
+Hier werden Informationen verstanden, eingeordnet und mögliche Schlussfolgerungen entwickelt.
+
+KI kann beispielsweise:
+
+* unstrukturierte Dokumente analysieren,
+* Anforderungen extrahieren,
+* mögliche Widersprüche erkennen,
+* fehlende Angaben benennen,
+* frühere Fälle vergleichen,
+* Hypothesen und Vorschläge erzeugen.
+
+Die Ergebnisse dieser Ebene können unsicher sein. Deshalb müssen Quelle, Kontext und Unsicherheit angemessen berücksichtigt werden.
+
+Ein Vorschlag ist noch keine verbindliche Entscheidung.
+
+2. Verbindliche Geschäftslogik
+
+Hier wird festgelegt, welche Bedingungen gelten und welche Zustandsänderungen zulässig sind.
+
+Beispiele:
+
+* Eine Freigabe setzt bestimmte Informationen voraus.
+* Eine Bestellung darf nur durch eine berechtigte Rolle ausgelöst werden.
+* Eine Abweichung erfordert eine dokumentierte Genehmigung.
+* Ein Vorhaben kann erst abgeschlossen werden, wenn definierte Bedingungen erfüllt sind.
+
+Solche Regeln sollten, soweit erforderlich, explizit und überprüfbar sein.
+
+Ein Sprachmodell sollte nicht allein deshalb eine verbindliche Geschäftsregel verändern dürfen, weil es in einem konkreten Fall eine andere Lösung für plausibel hält.
+
+Die Regeln müssen sich ändern lassen, aber kontrolliert und nachvollziehbar.
+
+3. Ausführung
+
+In dieser Ebene werden zulässige Aktionen ausgeführt.
+
+Das kann durch Softwarefunktionen, bestehende Unternehmenssysteme, Menschen oder KI-Agenten geschehen.
+
+Die Ausführung muss sich an die festgelegten Berechtigungen und Bedingungen halten.
+
+Eine Analyse kann beispielsweise ergeben, dass eine Information fehlt. Daraus folgt nicht automatisch die Berechtigung, eine Bestellung zu ändern oder einen Auftrag freizugeben.
+
+Die zulässigen Aktionen müssen zur jeweiligen Rolle und zum konkreten Zustand passen.
+
+4. Nachvollziehbarkeit
+
+Der Verlauf einer Arbeit muss bei Bedarf rekonstruierbar sein.
+
+Dazu gehören beispielsweise:
+
+* relevante Eingaben und Quellen,
+* verwendete Regeln und deren Version,
+* Vorschläge und Entscheidungen,
+* ausgeführte Aktionen,
+* Freigaben,
+* Zustandsänderungen,
+* Ergebnisse und Fehler.
+
+Nicht jede interne Modelloperation muss in jedem Fall vollständig protokolliert werden. Entscheidend ist, dass die für den jeweiligen Prozess erforderlichen Informationen nachvollziehbar bleiben.
+
+
+Wie geht man bei einem Piloten vor?
+
+Bestandsaufnahme Arbeitsablauf:
+
+* beteiligte Rollen,
+* verwendete Systeme,
+* Informationsquellen,
+* wiederkehrende Probleme,
+* Entscheidungspunkte,
+* Ausnahmen,
+* Qualitätsanforderungen,
+* bisherige Kennzahlen.
+
+Repräsentative reale Fälle in unterschiedlichen Situationen:
+
+* vollständige Informationen,
+* fehlende Angaben,
+* widersprüchliche Dokumente,
+* ungewöhnliche Ausnahmen,
+* veraltete Informationen,
+* Fälle, in denen eine frühere Lösung nicht übertragbar ist.
+
+Pilot durchführen und nach dem Pilot wird bewertet:
+
+* Wurde das Problem tatsächlich reduziert?
+* Welche Qualitätsveränderungen sind aufgetreten?
+* Wie hoch war der zusätzliche Aufwand?
+* Wie haben die Mitarbeiter die Lösung angenommen?
+* Welche Teile lassen sich wiederverwenden?
+* Welche Voraussetzungen wären für weitere Anwendungsfälle erforderlich?
+
+Daraus folgt eine begründete Entscheidung: ausbauen, anpassen oder beenden.

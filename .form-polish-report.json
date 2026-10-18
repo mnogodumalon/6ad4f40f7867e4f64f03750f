@@ -1,0 +1,70 @@
+{
+  "entities": {
+    "Vorhaben": {
+      "placeholders_set": 14,
+      "defaults_keys": [
+        "status",
+        "startdatum"
+      ],
+      "computed_keys": [
+        "_vorhaben_dauer_tage"
+      ],
+      "reason": "Start- und Abschlussdatum bilden ein Paar, daher wird die Dauer in Tagen als virtuelles Feld berechnet; keine Preise oder Mengen vorhanden."
+    },
+    "Beobachtungen": {
+      "placeholders_set": 7,
+      "defaults_keys": [
+        "beobachtet_am"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da es keine numerischen Felder oder Datumspaare gibt; reine Erfassung von Beobachtungen."
+    },
+    "Erkenntnisse": {
+      "placeholders_set": 13,
+      "defaults_keys": [
+        "stufe",
+        "freigabestatus",
+        "letzte_pruefung"
+      ],
+      "computed_keys": [],
+      "reason": "Reine Wissensdokumentation ohne numerische Felder, daher keine Formeln."
+    },
+    "Belege": {
+      "placeholders_set": 5,
+      "defaults_keys": [
+        "geprueft_am",
+        "wirkung_auf_erkenntnis",
+        "gewichtung"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da keine numerischen Felder oder Datumspaare vorhanden sind."
+    },
+    "Regeln": {
+      "placeholders_set": 14,
+      "defaults_keys": [
+        "freigabestatus",
+        "gueltig_ab",
+        "version"
+      ],
+      "computed_keys": [],
+      "reason": "Keine numerischen Felder, daher keine Formeln; nur Stammdaten mit Datumsangaben."
+    },
+    "Regelanwendungen": {
+      "placeholders_set": 7,
+      "defaults_keys": [
+        "angewendet_am",
+        "art_der_anwendung"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da das Formular keine numerischen Felder oder Datumspaare enthält."
+    },
+    "Pilotbewertungen": {
+      "placeholders_set": 10,
+      "defaults_keys": [
+        "bewertet_am"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da das Formular nur Text- und Auswahlfelder ohne numerische Berechnungskette enthält."
+    }
+  }
+}

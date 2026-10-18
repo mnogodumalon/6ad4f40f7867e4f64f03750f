@@ -1,0 +1,423 @@
+{
+  "version": 1,
+  "language": "de",
+  "understanding": {
+    "summary": "Die Anwendung macht Erfahrungswissen aus Vorhaben nutzbar. Sie verfolgt den Weg von der Beobachtung über Hypothese und Prüfung zur freigegebenen Regel, hält die Ursprungsfälle nachvollziehbar fest und dokumentiert, wie sich eine Regel in späteren Vorhaben bewährt hat. Überprüfung, Einschränkung, Überholung und Rücknahme von Erkenntnissen und Regeln bleiben kontrolliert und sichtbar.",
+    "roles": [
+      "Prozessverantwortliche",
+      "Mitarbeitende im Vorhaben",
+      "Freigebende",
+      "Pilotleitung"
+    ],
+    "main_tasks": [
+      "Vorhaben mit Intention, Kontext, Arbeit, Entscheidung und Erfahrung erfassen",
+      "Beobachtungen zu Vorhaben festhalten",
+      "Erkenntnisse prüfen und mit Belegen stützen",
+      "Regeln aus Erkenntnissen ableiten und freigeben",
+      "Regelanwendungen in Vorhaben dokumentieren",
+      "Pilot bewerten: ausbauen, anpassen oder beenden",
+      "Überprüfungstermine im Blick behalten"
+    ],
+    "platform_roles": [
+      {
+        "persona": "Prozessverantwortliche",
+        "role": "administrator",
+        "apps": [
+          "vorhaben",
+          "beobachtungen",
+          "erkenntnisse",
+          "belege",
+          "regeln",
+          "regelanwendungen",
+          "pilotbewertungen"
+        ]
+      },
+      {
+        "persona": "Mitarbeitende im Vorhaben",
+        "role": "standard",
+        "apps": [
+          "vorhaben",
+          "beobachtungen",
+          "regelanwendungen",
+          "regeln",
+          "erkenntnisse",
+          "belege"
+        ]
+      },
+      {
+        "persona": "Freigebende",
+        "role": "datenverarbeitung",
+        "apps": [
+          "erkenntnisse",
+          "belege",
+          "regeln",
+          "beobachtungen"
+        ]
+      },
+      {
+        "persona": "Pilotleitung",
+        "role": "datenverarbeitung",
+        "apps": [
+          "pilotbewertungen",
+          "regelanwendungen",
+          "vorhaben",
+          "regeln",
+          "erkenntnisse",
+          "beobachtungen",
+          "belege"
+        ]
+      }
+    ]
+  },
+  "flows": [
+    {
+      "slug": "erkenntnis-aus-beobachtung-ableiten",
+      "label": {
+        "de": "Erkenntnis aus Beobachtung ableiten",
+        "en": "Derive insight from observation"
+      },
+      "description": "Aus einer Beobachtung wird eine Hypothese angelegt und mit der Beobachtung als erstem Beleg verbunden.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "erkenntnisse",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "titel": "user",
+            "hypothese": "user",
+            "alternativerklaerungen": "user",
+            "gueltigkeitsbereich": "user",
+            "unsicherheit_grad": "user",
+            "unsicherheiten": "user",
+            "stufe": "fixed:hypothese",
+            "freigabestatus": "fixed:entwurf"
+          },
+          "needs": {}
+        },
+        {
+          "entity": "belege",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "beobachtung": "picked",
+            "erkenntnis": "picked",
+            "wirkung_auf_erkenntnis": "user",
+            "begruendung": "user",
+            "gewichtung": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `erkenntnis-aus-beobachtung-ableiten` — Erkenntnis aus Beobachtung ableiten\nAus einer Beobachtung wird eine Hypothese angelegt und mit der Beobachtung als erstem Beleg verbunden.\n\n## Your hook — import it, never rebuild what it owns\n`import { useErkenntnisAusBeobachtungAbleitenFlow } from '@/lib/journey/flows/ErkenntnisAusBeobachtungAbleiten';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: beobachtung, erkenntnis), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Beobachtung auswählen\n2. Titel, Hypothese und Alternativerklärungen eingeben\n3. Gültigkeitsbereich und Unsicherheit angeben\n4. Wirkung der Beobachtung und Begründung festhalten\n5. Erkenntnis und Beleg werden gespeichert\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `erkenntnisse`:\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `hypothese`: the user enters it (bind it through the layer: form.field/…)\n    - `alternativerklaerungen`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltigkeitsbereich`: the user enters it (bind it through the layer: form.field/…)\n    - `unsicherheit_grad`: the user enters it (bind it through the layer: form.field/…)\n    - `unsicherheiten`: the user enters it (bind it through the layer: form.field/…)\n    - `stufe`: fixed value `hypothese` — set it in the plan step's values, never ask\n    - `freigabestatus`: fixed value `entwurf` — set it in the plan step's values, never ask\n- creates `belege`:\n    - `beobachtung`: from the record the user picks in this flow\n    - `erkenntnis`: from the record the user picks in this flow\n    - `wirkung_auf_erkenntnis`: the user enters it (bind it through the layer: form.field/…)\n    - `begruendung`: the user enters it (bind it through the layer: form.field/…)\n    - `gewichtung`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `beobachtungen` columns beschreibung, vorhaben, beobachtet_am, fallart, betroffene_objekte\n\n## Success page\n- shows: `erkenntnisse.titel`, `erkenntnisse.stufe`\n- next flows to offer: `erkenntnis-pruefen`\n\n## Never write these — another flow or a tool owns them\n- `belege.geprueft_von` (owner: intent `erkenntnis-pruefen`)\n- `belege.geprueft_am` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.schlussfolgerung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widersprechende_erkenntnis` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widerspruch_notiz` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.letzte_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.naechste_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `regeln.erkenntnis` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltitel` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltext` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.version` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.gueltigkeitsbereich` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.ausnahmeregelung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.verantwortlicher` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigabestatus` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regeln.gueltig_ab` (owner: intent `regel-freigeben-aendern`)\n- `regeln.aenderungsgrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.ruecknahmegrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.letzte_pruefung` (owner: intent `regel-freigeben-aendern`)\n- `erkenntnisse.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regelanwendungen.vorhaben` (owner: intent `regel-anwenden`)\n- `regelanwendungen.regel` (owner: intent `regel-anwenden`)\n- `regelanwendungen.angewendet_am` (owner: intent `regel-anwenden`)\n- `regelanwendungen.art_der_anwendung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.ergebnis` (owner: intent `regel-anwenden`)\n- `regelanwendungen.fehler_reduziert` (owner: intent `regel-anwenden`)\n- `regelanwendungen.nebenwirkungen` (owner: intent `regel-anwenden`)\n- `regelanwendungen.wirkungsbewertung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.bewertet_von` (owner: intent `regel-anwenden`)\n- `pilotbewertungen.vorhaben` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.regel` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.bewertet_am` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.problem_reduziert` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.qualitaetsveraenderung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.zusatzaufwand` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.akzeptanz` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.wiederverwendbar` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.voraussetzungen` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidungsbegruendung` (owner: intent `pilot-bewerten`)\n"
+    },
+    {
+      "slug": "erkenntnis-pruefen",
+      "label": {
+        "de": "Erkenntnis prüfen",
+        "en": "Review insight"
+      },
+      "description": "Eine Erkenntnis wird mit weiteren Belegen geprüft, bewertet und auf die nächste Stufe gesetzt; Widersprüche werden dokumentiert.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "belege",
+          "op": "create",
+          "when": "optional",
+          "fields": {
+            "erkenntnis": "picked",
+            "beobachtung": "picked",
+            "wirkung_auf_erkenntnis": "user",
+            "begruendung": "user",
+            "gewichtung": "user",
+            "geprueft_von": "user",
+            "geprueft_am": "derived:today"
+          },
+          "needs": {}
+        },
+        {
+          "entity": "erkenntnisse",
+          "op": "update",
+          "when": "always",
+          "fields": {
+            "pruefung": "user",
+            "schlussfolgerung": "user",
+            "stufe": "user",
+            "unsicherheit_grad": "user",
+            "unsicherheiten": "user",
+            "gueltigkeitsbereich": "user",
+            "widersprechende_erkenntnis": "picked",
+            "widerspruch_notiz": "user",
+            "letzte_pruefung": "derived:today",
+            "naechste_pruefung": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `erkenntnis-pruefen` — Erkenntnis prüfen\nEine Erkenntnis wird mit weiteren Belegen geprüft, bewertet und auf die nächste Stufe gesetzt; Widersprüche werden dokumentiert.\n\n## Your hook — import it, never rebuild what it owns\n`import { useErkenntnisPruefenFlow } from '@/lib/journey/flows/ErkenntnisPruefen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: erkenntnis, beobachtung, widersprechende_erkenntnis), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. This flow CHANGES a record of `erkenntnisse`: `{...flow.picks.erkenntnisse.select} {...flow.pick('erkenntnisse')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Erkenntnis auswählen\n2. Bestehende Belege ansehen\n3. Weitere Beobachtung als bestätigenden oder widersprechenden Beleg hinzufügen\n4. Prüfung, Schlussfolgerung und Unsicherheit festhalten\n5. Stufe und Prüftermine setzen\n6. Bei Widerspruch die widersprechende Erkenntnis verknüpfen und dokumentieren\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `belege` (only when the flow needs it):\n    - `erkenntnis`: from the record the user picks in this flow\n    - `beobachtung`: from the record the user picks in this flow\n    - `wirkung_auf_erkenntnis`: the user enters it (bind it through the layer: form.field/…)\n    - `begruendung`: the user enters it (bind it through the layer: form.field/…)\n    - `gewichtung`: the user enters it (bind it through the layer: form.field/…)\n    - `geprueft_von`: the user enters it (bind it through the layer: form.field/…)\n    - `geprueft_am`: derived: today() — set it in the plan step, never ask\n- updates `erkenntnisse`:\n    - `pruefung`: the user enters it (bind it through the layer: form.field/…)\n    - `schlussfolgerung`: the user enters it (bind it through the layer: form.field/…)\n    - `stufe`: the user enters it (bind it through the layer: form.field/…)\n    - `unsicherheit_grad`: the user enters it (bind it through the layer: form.field/…)\n    - `unsicherheiten`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltigkeitsbereich`: the user enters it (bind it through the layer: form.field/…)\n    - `widersprechende_erkenntnis`: from the record the user picks in this flow\n    - `widerspruch_notiz`: the user enters it (bind it through the layer: form.field/…)\n    - `letzte_pruefung`: derived: today() — set it in the plan step, never ask\n    - `naechste_pruefung`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `erkenntnisse` columns titel, stufe, hypothese, letzte_pruefung, naechste_pruefung\n- `belege` columns beobachtung, wirkung_auf_erkenntnis, gewichtung, begruendung\n- `beobachtungen` columns beschreibung, vorhaben, fallart\n\n## Success page\n- shows: `erkenntnisse.stufe`, `erkenntnisse.naechste_pruefung`\n- next flows to offer: `erkenntnis-freigeben-regel-ableiten`\n\n## Never write these — another flow or a tool owns them\n- `erkenntnisse.titel` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.hypothese` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.alternativerklaerungen` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.freigabestatus` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `regeln.erkenntnis` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltitel` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltext` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.version` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.gueltigkeitsbereich` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.ausnahmeregelung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.verantwortlicher` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigabestatus` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regeln.gueltig_ab` (owner: intent `regel-freigeben-aendern`)\n- `regeln.aenderungsgrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.ruecknahmegrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.letzte_pruefung` (owner: intent `regel-freigeben-aendern`)\n- `erkenntnisse.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regelanwendungen.vorhaben` (owner: intent `regel-anwenden`)\n- `regelanwendungen.regel` (owner: intent `regel-anwenden`)\n- `regelanwendungen.angewendet_am` (owner: intent `regel-anwenden`)\n- `regelanwendungen.art_der_anwendung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.ergebnis` (owner: intent `regel-anwenden`)\n- `regelanwendungen.fehler_reduziert` (owner: intent `regel-anwenden`)\n- `regelanwendungen.nebenwirkungen` (owner: intent `regel-anwenden`)\n- `regelanwendungen.wirkungsbewertung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.bewertet_von` (owner: intent `regel-anwenden`)\n- `pilotbewertungen.vorhaben` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.regel` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.bewertet_am` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.problem_reduziert` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.qualitaetsveraenderung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.zusatzaufwand` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.akzeptanz` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.wiederverwendbar` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.voraussetzungen` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidungsbegruendung` (owner: intent `pilot-bewerten`)\n"
+    },
+    {
+      "slug": "erkenntnis-freigeben-regel-ableiten",
+      "label": {
+        "de": "Regel aus Erkenntnis ableiten",
+        "en": "Derive rule from insight"
+      },
+      "description": "Aus einer geprüften Erkenntnis wird ein Regelentwurf erstellt. Die Erkenntnis wird zur Freigabe vorgelegt; die Regel gilt erst nach Freigabe.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "regeln",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "erkenntnis": "picked",
+            "regeltitel": "user",
+            "regeltext": "user",
+            "version": "user",
+            "gueltigkeitsbereich": "user",
+            "ausnahmeregelung": "user",
+            "verantwortlicher": "user",
+            "naechste_pruefung": "user",
+            "freigabestatus": "fixed:zur_freigabe"
+          },
+          "needs": {}
+        },
+        {
+          "entity": "erkenntnisse",
+          "op": "update",
+          "when": "always",
+          "fields": {
+            "freigabestatus": "fixed:zur_freigabe"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `erkenntnis-freigeben-regel-ableiten` — Regel aus Erkenntnis ableiten\nAus einer geprüften Erkenntnis wird ein Regelentwurf erstellt. Die Erkenntnis wird zur Freigabe vorgelegt; die Regel gilt erst nach Freigabe.\n\n## Your hook — import it, never rebuild what it owns\n`import { useErkenntnisFreigebenRegelAbleitenFlow } from '@/lib/journey/flows/ErkenntnisFreigebenRegelAbleiten';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: erkenntnis), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. This flow CHANGES a record of `erkenntnisse`: `{...flow.picks.erkenntnisse.select} {...flow.pick('erkenntnisse')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Erkenntnis der Stufe Erfahrung auswählen\n2. Regeltitel, Regeltext, Version und Gültigkeitsbereich eingeben\n3. Autorisierte Ausnahme und Verantwortliche festlegen\n4. Regel als Entwurf zur Freigabe speichern\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `regeln`:\n    - `erkenntnis`: from the record the user picks in this flow\n    - `regeltitel`: the user enters it (bind it through the layer: form.field/…)\n    - `regeltext`: the user enters it (bind it through the layer: form.field/…)\n    - `version`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltigkeitsbereich`: the user enters it (bind it through the layer: form.field/…)\n    - `ausnahmeregelung`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlicher`: the user enters it (bind it through the layer: form.field/…)\n    - `naechste_pruefung`: the user enters it (bind it through the layer: form.field/…)\n    - `freigabestatus`: fixed value `zur_freigabe` — set it in the plan step's values, never ask\n- updates `erkenntnisse`:\n    - `freigabestatus`: fixed value `zur_freigabe` — set it in the plan step's values, never ask\n\n## Reads\n- `erkenntnisse` columns titel, stufe, schlussfolgerung, gueltigkeitsbereich, unsicherheit_grad\n\n## Success page\n- shows: `regeln.regeltitel`, `regeln.freigabestatus`\n- next flows to offer: `regel-freigeben-aendern`\n\n## Never write these — another flow or a tool owns them\n- `erkenntnisse.titel` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.hypothese` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.alternativerklaerungen` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.gueltigkeitsbereich` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheit_grad` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheiten` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.stufe` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.beobachtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.wirkung_auf_erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.begruendung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.gewichtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.geprueft_von` (owner: intent `erkenntnis-pruefen`)\n- `belege.geprueft_am` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.schlussfolgerung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widersprechende_erkenntnis` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widerspruch_notiz` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.letzte_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.naechste_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `regeln.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regeln.gueltig_ab` (owner: intent `regel-freigeben-aendern`)\n- `regeln.aenderungsgrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.ruecknahmegrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.letzte_pruefung` (owner: intent `regel-freigeben-aendern`)\n- `erkenntnisse.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regelanwendungen.vorhaben` (owner: intent `regel-anwenden`)\n- `regelanwendungen.regel` (owner: intent `regel-anwenden`)\n- `regelanwendungen.angewendet_am` (owner: intent `regel-anwenden`)\n- `regelanwendungen.art_der_anwendung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.ergebnis` (owner: intent `regel-anwenden`)\n- `regelanwendungen.fehler_reduziert` (owner: intent `regel-anwenden`)\n- `regelanwendungen.nebenwirkungen` (owner: intent `regel-anwenden`)\n- `regelanwendungen.wirkungsbewertung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.bewertet_von` (owner: intent `regel-anwenden`)\n- `pilotbewertungen.vorhaben` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.regel` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.bewertet_am` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.problem_reduziert` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.qualitaetsveraenderung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.zusatzaufwand` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.akzeptanz` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.wiederverwendbar` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.voraussetzungen` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidungsbegruendung` (owner: intent `pilot-bewerten`)\n"
+    },
+    {
+      "slug": "regel-freigeben-aendern",
+      "label": {
+        "de": "Regel freigeben oder ändern",
+        "en": "Approve or change rule"
+      },
+      "description": "Eine Regel wird kontrolliert freigegeben, eingeschränkt, als überholt gekennzeichnet oder zurückgenommen, mit Begründung.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "regeln",
+          "op": "update",
+          "when": "always",
+          "fields": {
+            "freigabestatus": "user",
+            "freigegeben_von": "user",
+            "gueltig_ab": "user",
+            "aenderungsgrund": "user",
+            "ruecknahmegrund": "user",
+            "gueltigkeitsbereich": "user",
+            "letzte_pruefung": "derived:today",
+            "naechste_pruefung": "user"
+          },
+          "needs": {}
+        },
+        {
+          "entity": "erkenntnisse",
+          "op": "update",
+          "when": "optional",
+          "fields": {
+            "freigabestatus": "user",
+            "freigegeben_von": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `regel-freigeben-aendern` — Regel freigeben oder ändern\nEine Regel wird kontrolliert freigegeben, eingeschränkt, als überholt gekennzeichnet oder zurückgenommen, mit Begründung.\n\n## Your hook — import it, never rebuild what it owns\n`import { useRegelFreigebenAendernFlow } from '@/lib/journey/flows/RegelFreigebenAendern';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. This flow CHANGES a record of `regeln`: `{...flow.picks.regeln.select} {...flow.pick('regeln')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. This flow CHANGES a record of `erkenntnisse`: `{...flow.picks.erkenntnisse.select} {...flow.pick('erkenntnisse')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Regel auswählen\n2. Neuen Freigabestatus wählen\n3. Änderungsgrund bzw. Rücknahmegrund angeben\n4. Gültig-ab-Datum und Prüftermin setzen\n5. Freigebende Person festhalten\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- updates `regeln`:\n    - `freigabestatus`: the user enters it (bind it through the layer: form.field/…)\n    - `freigegeben_von`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltig_ab`: the user enters it (bind it through the layer: form.field/…)\n    - `aenderungsgrund`: the user enters it (bind it through the layer: form.field/…)\n    - `ruecknahmegrund`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltigkeitsbereich`: the user enters it (bind it through the layer: form.field/…)\n    - `letzte_pruefung`: derived: today() — set it in the plan step, never ask\n    - `naechste_pruefung`: the user enters it (bind it through the layer: form.field/…)\n- updates `erkenntnisse` (only when the flow needs it):\n    - `freigabestatus`: the user enters it (bind it through the layer: form.field/…)\n    - `freigegeben_von`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `regeln` columns regeltitel, version, freigabestatus, erkenntnis, gueltigkeitsbereich\n\n## Success page\n- shows: `regeln.freigabestatus`, `regeln.gueltig_ab`\n- next flows to offer: `regel-anwenden`\n\n## Never write these — another flow or a tool owns them\n- `erkenntnisse.titel` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.hypothese` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.alternativerklaerungen` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.gueltigkeitsbereich` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheit_grad` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheiten` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.stufe` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.beobachtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.wirkung_auf_erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.begruendung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.gewichtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.geprueft_von` (owner: intent `erkenntnis-pruefen`)\n- `belege.geprueft_am` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.schlussfolgerung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widersprechende_erkenntnis` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widerspruch_notiz` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.letzte_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.naechste_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `regeln.erkenntnis` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltitel` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltext` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.version` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.ausnahmeregelung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.verantwortlicher` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regelanwendungen.vorhaben` (owner: intent `regel-anwenden`)\n- `regelanwendungen.regel` (owner: intent `regel-anwenden`)\n- `regelanwendungen.angewendet_am` (owner: intent `regel-anwenden`)\n- `regelanwendungen.art_der_anwendung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.ergebnis` (owner: intent `regel-anwenden`)\n- `regelanwendungen.fehler_reduziert` (owner: intent `regel-anwenden`)\n- `regelanwendungen.nebenwirkungen` (owner: intent `regel-anwenden`)\n- `regelanwendungen.wirkungsbewertung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.bewertet_von` (owner: intent `regel-anwenden`)\n- `pilotbewertungen.vorhaben` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.regel` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.bewertet_am` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.problem_reduziert` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.qualitaetsveraenderung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.zusatzaufwand` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.akzeptanz` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.wiederverwendbar` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.voraussetzungen` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidungsbegruendung` (owner: intent `pilot-bewerten`)\n"
+    },
+    {
+      "slug": "regel-anwenden",
+      "label": {
+        "de": "Regel im Vorhaben anwenden",
+        "en": "Apply rule in project"
+      },
+      "description": "Eine freigegebene Regel wird einem Vorhaben zugeordnet und die Art der Anwendung samt Wirkung dokumentiert.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "regelanwendungen",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorhaben": "picked",
+            "regel": "picked",
+            "angewendet_am": "derived:today",
+            "art_der_anwendung": "user",
+            "ergebnis": "user",
+            "fehler_reduziert": "user",
+            "nebenwirkungen": "user",
+            "wirkungsbewertung": "user",
+            "bewertet_von": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `regel-anwenden` — Regel im Vorhaben anwenden\nEine freigegebene Regel wird einem Vorhaben zugeordnet und die Art der Anwendung samt Wirkung dokumentiert.\n\n## Your hook — import it, never rebuild what it owns\n`import { useRegelAnwendenFlow } from '@/lib/journey/flows/RegelAnwenden';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorhaben, regel), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorhaben auswählen\n2. Freigegebene Regel auswählen\n3. Art der Anwendung und Ergebnis erfassen\n4. Wirkung auf Fehler, Nebenwirkungen und Bewertung festhalten\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `regelanwendungen`:\n    - `vorhaben`: from the record the user picks in this flow\n    - `regel`: from the record the user picks in this flow\n    - `angewendet_am`: derived: today() — set it in the plan step, never ask\n    - `art_der_anwendung`: the user enters it (bind it through the layer: form.field/…)\n    - `ergebnis`: the user enters it (bind it through the layer: form.field/…)\n    - `fehler_reduziert`: the user enters it (bind it through the layer: form.field/…)\n    - `nebenwirkungen`: the user enters it (bind it through the layer: form.field/…)\n    - `wirkungsbewertung`: the user enters it (bind it through the layer: form.field/…)\n    - `bewertet_von`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `vorhaben` columns titel, status, intention\n- `regeln` columns regeltitel, version, gueltigkeitsbereich, ausnahmeregelung\n\n## Success page\n- shows: `regelanwendungen.regel`, `regelanwendungen.art_der_anwendung`\n- next flows to offer: `pilot-bewerten`\n\n## Never write these — another flow or a tool owns them\n- `erkenntnisse.titel` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.hypothese` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.alternativerklaerungen` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.gueltigkeitsbereich` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheit_grad` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheiten` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.stufe` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.freigabestatus` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.beobachtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.wirkung_auf_erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.begruendung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.gewichtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.geprueft_von` (owner: intent `erkenntnis-pruefen`)\n- `belege.geprueft_am` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.schlussfolgerung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widersprechende_erkenntnis` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widerspruch_notiz` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.letzte_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.naechste_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `regeln.erkenntnis` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltitel` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltext` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.version` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.gueltigkeitsbereich` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.ausnahmeregelung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.verantwortlicher` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigabestatus` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regeln.gueltig_ab` (owner: intent `regel-freigeben-aendern`)\n- `regeln.aenderungsgrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.ruecknahmegrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.letzte_pruefung` (owner: intent `regel-freigeben-aendern`)\n- `erkenntnisse.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `pilotbewertungen.vorhaben` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.regel` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.bewertet_am` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.problem_reduziert` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.qualitaetsveraenderung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.zusatzaufwand` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.akzeptanz` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.wiederverwendbar` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.voraussetzungen` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidung` (owner: intent `pilot-bewerten`)\n- `pilotbewertungen.entscheidungsbegruendung` (owner: intent `pilot-bewerten`)\n"
+    },
+    {
+      "slug": "pilot-bewerten",
+      "label": {
+        "de": "Pilot bewerten",
+        "en": "Evaluate pilot"
+      },
+      "description": "Nach dem Pilot wird bewertet, ob das Problem reduziert wurde, und eine begründete Entscheidung getroffen: ausbauen, anpassen oder beenden.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "pilotbewertungen",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorhaben": "picked",
+            "regel": "picked",
+            "bewertet_am": "derived:today",
+            "problem_reduziert": "user",
+            "qualitaetsveraenderung": "user",
+            "zusatzaufwand": "user",
+            "akzeptanz": "user",
+            "wiederverwendbar": "user",
+            "voraussetzungen": "user",
+            "entscheidung": "user",
+            "entscheidungsbegruendung": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `pilot-bewerten` — Pilot bewerten\nNach dem Pilot wird bewertet, ob das Problem reduziert wurde, und eine begründete Entscheidung getroffen: ausbauen, anpassen oder beenden.\n\n## Your hook — import it, never rebuild what it owns\n`import { usePilotBewertenFlow } from '@/lib/journey/flows/PilotBewerten';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorhaben, regel), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorhaben und betroffene Regel auswählen\n2. Bisherige Regelanwendungen ansehen\n3. Problemreduktion, Qualität, Aufwand, Akzeptanz, Wiederverwendbares und Voraussetzungen erfassen\n4. Entscheidung mit Begründung speichern\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `pilotbewertungen`:\n    - `vorhaben`: from the record the user picks in this flow\n    - `regel`: from the record the user picks in this flow\n    - `bewertet_am`: derived: today() — set it in the plan step, never ask\n    - `problem_reduziert`: the user enters it (bind it through the layer: form.field/…)\n    - `qualitaetsveraenderung`: the user enters it (bind it through the layer: form.field/…)\n    - `zusatzaufwand`: the user enters it (bind it through the layer: form.field/…)\n    - `akzeptanz`: the user enters it (bind it through the layer: form.field/…)\n    - `wiederverwendbar`: the user enters it (bind it through the layer: form.field/…)\n    - `voraussetzungen`: the user enters it (bind it through the layer: form.field/…)\n    - `entscheidung`: the user enters it (bind it through the layer: form.field/…)\n    - `entscheidungsbegruendung`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `regelanwendungen` columns regel, vorhaben, art_der_anwendung, fehler_reduziert, nebenwirkungen\n- `vorhaben` columns titel, status, ergebnis\n\n## Success page\n- shows: `pilotbewertungen.entscheidung`, `pilotbewertungen.entscheidungsbegruendung`\n\n## Never write these — another flow or a tool owns them\n- `erkenntnisse.titel` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.hypothese` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.alternativerklaerungen` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.gueltigkeitsbereich` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheit_grad` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.unsicherheiten` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.stufe` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `erkenntnisse.freigabestatus` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.beobachtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.wirkung_auf_erkenntnis` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.begruendung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.gewichtung` (owner: intent `erkenntnis-aus-beobachtung-ableiten`)\n- `belege.geprueft_von` (owner: intent `erkenntnis-pruefen`)\n- `belege.geprueft_am` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.schlussfolgerung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widersprechende_erkenntnis` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.widerspruch_notiz` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.letzte_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `erkenntnisse.naechste_pruefung` (owner: intent `erkenntnis-pruefen`)\n- `regeln.erkenntnis` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltitel` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.regeltext` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.version` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.gueltigkeitsbereich` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.ausnahmeregelung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.verantwortlicher` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigabestatus` (owner: intent `erkenntnis-freigeben-regel-ableiten`)\n- `regeln.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regeln.gueltig_ab` (owner: intent `regel-freigeben-aendern`)\n- `regeln.aenderungsgrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.ruecknahmegrund` (owner: intent `regel-freigeben-aendern`)\n- `regeln.letzte_pruefung` (owner: intent `regel-freigeben-aendern`)\n- `erkenntnisse.freigegeben_von` (owner: intent `regel-freigeben-aendern`)\n- `regelanwendungen.vorhaben` (owner: intent `regel-anwenden`)\n- `regelanwendungen.regel` (owner: intent `regel-anwenden`)\n- `regelanwendungen.angewendet_am` (owner: intent `regel-anwenden`)\n- `regelanwendungen.art_der_anwendung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.ergebnis` (owner: intent `regel-anwenden`)\n- `regelanwendungen.fehler_reduziert` (owner: intent `regel-anwenden`)\n- `regelanwendungen.nebenwirkungen` (owner: intent `regel-anwenden`)\n- `regelanwendungen.wirkungsbewertung` (owner: intent `regel-anwenden`)\n- `regelanwendungen.bewertet_von` (owner: intent `regel-anwenden`)\n"
+    }
+  ],
+  "public_pages": [],
+  "tools": [
+    {
+      "id": "erkenntnis-pruefung-erinnern",
+      "purpose": "Täglich eine Sammelmail an den Schlüsselinhaber mit allen Erkenntnissen der Stufen Erfahrung oder Eingeschränkt, deren Überprüfungstermin vorbei ist. Es werden keine Datensätze geändert."
+    },
+    {
+      "id": "regel-pruefung-erinnern",
+      "purpose": "Täglich eine Sammelmail an den Schlüsselinhaber mit allen freigegebenen oder eingeschränkten Regeln, deren Überprüfungstermin vorbei ist. Es werden keine Datensätze geändert."
+    }
+  ],
+  "covered_by_platform": [
+    {
+      "wish": "Nachvollziehbarkeit: Verlauf, Zustandsänderungen und Änderungen rekonstruieren",
+      "feature": "record_history"
+    },
+    {
+      "wish": "Dokumente und Quellen an Vorhaben, Beobachtungen oder Regeln anhängen",
+      "feature": "record_attachments"
+    },
+    {
+      "wish": "Berechtigungen nach Rolle und Zustand",
+      "feature": "user_roles"
+    },
+    {
+      "wish": "Übersicht der Erkenntnisse und Regeln je Stufe oder Freigabestatus",
+      "feature": "distribution_view"
+    },
+    {
+      "wish": "Erfassen und Bearbeiten einzelner Vorhaben, Beobachtungen und Belege",
+      "feature": "record_form"
+    },
+    {
+      "wish": "Fälle nach Produktvariante oder Quelle suchen und vergleichen",
+      "feature": "search_filter"
+    }
+  ],
+  "ownership": {
+    "erkenntnisse": {
+      "titel": "intent:erkenntnis-aus-beobachtung-ableiten",
+      "hypothese": "intent:erkenntnis-aus-beobachtung-ableiten",
+      "alternativerklaerungen": "intent:erkenntnis-aus-beobachtung-ableiten",
+      "gueltigkeitsbereich": "intent:erkenntnis-pruefen",
+      "unsicherheit_grad": "intent:erkenntnis-pruefen",
+      "unsicherheiten": "intent:erkenntnis-pruefen",
+      "stufe": "intent:erkenntnis-pruefen",
+      "freigabestatus": "intent:regel-freigeben-aendern",
+      "pruefung": "intent:erkenntnis-pruefen",
+      "schlussfolgerung": "intent:erkenntnis-pruefen",
+      "widersprechende_erkenntnis": "intent:erkenntnis-pruefen",
+      "widerspruch_notiz": "intent:erkenntnis-pruefen",
+      "letzte_pruefung": "intent:erkenntnis-pruefen",
+      "naechste_pruefung": "intent:erkenntnis-pruefen",
+      "freigegeben_von": "intent:regel-freigeben-aendern"
+    },
+    "belege": {
+      "beobachtung": "intent:erkenntnis-pruefen",
+      "erkenntnis": "intent:erkenntnis-pruefen",
+      "wirkung_auf_erkenntnis": "intent:erkenntnis-pruefen",
+      "begruendung": "intent:erkenntnis-pruefen",
+      "gewichtung": "intent:erkenntnis-pruefen",
+      "geprueft_von": "intent:erkenntnis-pruefen",
+      "geprueft_am": "intent:erkenntnis-pruefen"
+    },
+    "regeln": {
+      "erkenntnis": "intent:erkenntnis-freigeben-regel-ableiten",
+      "regeltitel": "intent:erkenntnis-freigeben-regel-ableiten",
+      "regeltext": "intent:erkenntnis-freigeben-regel-ableiten",
+      "version": "intent:erkenntnis-freigeben-regel-ableiten",
+      "gueltigkeitsbereich": "intent:regel-freigeben-aendern",
+      "ausnahmeregelung": "intent:erkenntnis-freigeben-regel-ableiten",
+      "verantwortlicher": "intent:erkenntnis-freigeben-regel-ableiten",
+      "naechste_pruefung": "intent:regel-freigeben-aendern",
+      "freigabestatus": "intent:regel-freigeben-aendern",
+      "freigegeben_von": "intent:regel-freigeben-aendern",
+      "gueltig_ab": "intent:regel-freigeben-aendern",
+      "aenderungsgrund": "intent:regel-freigeben-aendern",
+      "ruecknahmegrund": "intent:regel-freigeben-aendern",
+      "letzte_pruefung": "intent:regel-freigeben-aendern"
+    },
+    "regelanwendungen": {
+      "vorhaben": "intent:regel-anwenden",
+      "regel": "intent:regel-anwenden",
+      "angewendet_am": "intent:regel-anwenden",
+      "art_der_anwendung": "intent:regel-anwenden",
+      "ergebnis": "intent:regel-anwenden",
+      "fehler_reduziert": "intent:regel-anwenden",
+      "nebenwirkungen": "intent:regel-anwenden",
+      "wirkungsbewertung": "intent:regel-anwenden",
+      "bewertet_von": "intent:regel-anwenden"
+    },
+    "pilotbewertungen": {
+      "vorhaben": "intent:pilot-bewerten",
+      "regel": "intent:pilot-bewerten",
+      "bewertet_am": "intent:pilot-bewerten",
+      "problem_reduziert": "intent:pilot-bewerten",
+      "qualitaetsveraenderung": "intent:pilot-bewerten",
+      "zusatzaufwand": "intent:pilot-bewerten",
+      "akzeptanz": "intent:pilot-bewerten",
+      "wiederverwendbar": "intent:pilot-bewerten",
+      "voraussetzungen": "intent:pilot-bewerten",
+      "entscheidung": "intent:pilot-bewerten",
+      "entscheidungsbegruendung": "intent:pilot-bewerten"
+    }
+  },
+  "dashboard": {
+    "focus": [
+      "Fällige Überprüfungen von Erkenntnissen und Regeln",
+      "Erkenntnisse je Stufe",
+      "Regeln zur Freigabe",
+      "Laufende Vorhaben",
+      "Widersprechende Belege",
+      "Pilotentscheidungen"
+    ],
+    "hints": [
+      "Überfällige Überprüfungstermine zuerst anzeigen",
+      "Regeln nach Freigabestatus gruppieren",
+      "Beobachtungen nach Art des Falls zählen"
+    ],
+    "wishes": []
+  }
+}
