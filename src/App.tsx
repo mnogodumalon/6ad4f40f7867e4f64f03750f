@@ -14,6 +14,13 @@ import { IntentPolicyLoader } from '@/components/IntentPolicyLoader';
 import IntentsAdmin from '@/pages/IntentsAdmin';
 import AppMap from '@/pages/AppMap';
 // <custom:imports>
+const IntentErkenntnisAusBeobachtungAbleitenPage = lazy(() => import('@/pages/intents/ErkenntnisAusBeobachtungAbleitenPage'));
+import { DashboardSkeleton } from '@/components/DashboardStates';
+const IntentErkenntnisPruefenPage = lazy(() => import('@/pages/intents/ErkenntnisPruefenPage'));
+const IntentErkenntnisFreigebenRegelAbleitenPage = lazy(() => import('@/pages/intents/ErkenntnisFreigebenRegelAbleitenPage'));
+const IntentRegelFreigebenAendernPage = lazy(() => import('@/pages/intents/RegelFreigebenAendernPage'));
+const IntentRegelAnwendenPage = lazy(() => import('@/pages/intents/RegelAnwendenPage'));
+const IntentPilotBewertenPage = lazy(() => import('@/pages/intents/PilotBewertenPage'));
 // </custom:imports>
 
 // Lazy: public pages live outside <Layout> and only load on /#/public/:slug —
@@ -85,6 +92,12 @@ export default function App() {
                 <Route path="verwaltung/oeffentliche-seiten" element={<PublicPagesAdmin />} />
                 <Route path="verwaltung/oeffentliche-seiten/:slug/felder" element={<PublicPageFields />} />
                 {/* <custom:routes> */}
+                <Route path="intents/erkenntnis-aus-beobachtung-ableiten" element={<Suspense fallback={<DashboardSkeleton />}><IntentErkenntnisAusBeobachtungAbleitenPage /></Suspense>} />
+                <Route path="intents/erkenntnis-pruefen" element={<Suspense fallback={<DashboardSkeleton />}><IntentErkenntnisPruefenPage /></Suspense>} />
+                <Route path="intents/erkenntnis-freigeben-regel-ableiten" element={<Suspense fallback={<DashboardSkeleton />}><IntentErkenntnisFreigebenRegelAbleitenPage /></Suspense>} />
+                <Route path="intents/regel-freigeben-aendern" element={<Suspense fallback={<DashboardSkeleton />}><IntentRegelFreigebenAendernPage /></Suspense>} />
+                <Route path="intents/regel-anwenden" element={<Suspense fallback={<DashboardSkeleton />}><IntentRegelAnwendenPage /></Suspense>} />
+                <Route path="intents/pilot-bewerten" element={<Suspense fallback={<DashboardSkeleton />}><IntentPilotBewertenPage /></Suspense>} />
                 {/* </custom:routes> */}
                 {/* An unknown hash (a bookmark from before a rebuild renamed the
                     flows, a mistyped link) must not be a blank page. */}

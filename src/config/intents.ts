@@ -20,6 +20,7 @@
 import type { ComponentType } from 'react';
 
 // <custom:intent-imports>
+import { IconBulb, IconChecklist, IconGavel, IconShieldCheck, IconRulerMeasure, IconFlask } from '@tabler/icons-react';
 // </custom:intent-imports>
 
 export interface IntentLink {
@@ -42,6 +43,12 @@ export interface IntentLink {
 
 export const INTENTS: IntentLink[] = [
   // <custom:intents>
+  { path: '/intents/erkenntnis-aus-beobachtung-ableiten', label: { de: 'Erkenntnis aus Beobachtung ableiten', en: 'Derive insight from observation' }, icon: IconBulb, description: 'Aus einer Beobachtung eine Hypothese anlegen und als ersten Beleg verbinden' },
+  { path: '/intents/erkenntnis-pruefen', label: { de: 'Erkenntnis prüfen', en: 'Review insight' }, icon: IconChecklist, description: 'Erkenntnis mit Belegen prüfen, Stufe setzen und Widersprüche dokumentieren' },
+  { path: '/intents/erkenntnis-freigeben-regel-ableiten', label: { de: 'Regel aus Erkenntnis ableiten', en: 'Derive rule from insight' }, icon: IconGavel, description: 'Aus einer geprüften Erkenntnis einen Regelentwurf zur Freigabe erstellen' },
+  { path: '/intents/regel-freigeben-aendern', label: { de: 'Regel freigeben oder ändern', en: 'Approve or change rule' }, icon: IconShieldCheck, description: 'Regel freigeben, einschränken, als überholt kennzeichnen oder zurücknehmen' },
+  { path: '/intents/regel-anwenden', label: { de: 'Regel im Vorhaben anwenden', en: 'Apply rule in project' }, icon: IconRulerMeasure, description: 'Freigegebene Regel einem Vorhaben zuordnen und die Wirkung dokumentieren' },
+  { path: '/intents/pilot-bewerten', label: { de: 'Pilot bewerten', en: 'Evaluate pilot' }, icon: IconFlask, description: 'Pilot bewerten und ausbauen, anpassen oder beenden entscheiden' },
   // </custom:intents>
 ];
 
@@ -52,7 +59,7 @@ export const INTENTS: IntentLink[] = [
  * purpose — a scaffold update resets it to false (self-healing if Phase 2
  * never ran).
  */
-export const INTENTS_PENDING = true;
+export const INTENTS_PENDING = false;
 
 /**
  * When the Phase-1 bundle was deployed (ISO, set by the service together with
