@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "flows": [
+    {
+      "path": "/intents/erkenntnis-aus-beobachtung-ableiten",
+      "label": "Erkenntnis aus Beobachtung ableiten",
+      "description": "Aus einer Beobachtung eine Hypothese anlegen und als ersten Beleg verbinden",
+      "file": "src/pages/intents/ErkenntnisAusBeobachtungAbleitenPage.tsx",
+      "summary": "/**\n * Erkenntnis aus Beobachtung ableiten — 5-Schritt-Wizard.\n * Steps: 1) Beobachtung wählen → 2) Titel, Hypothese, Alternativen → 3) Gültigkeit & Unsicherheit\n *        → 4) Wirkung & Begründung des Belegs → 5) Prüfen & speichern.\n * Reads: beobachtungen. Writes: erkenntnisse (stufe=hypothese, freigabestatus=entwurf), belege (verknüpft mit Beobachtung und neuer Erkenntnis).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/erkenntnis-pruefen",
+      "label": "Erkenntnis prüfen",
+      "description": "Erkenntnis mit Belegen prüfen, Stufe setzen und Widersprüche dokumentieren",
+      "file": "src/pages/intents/ErkenntnisPruefenPage.tsx",
+      "summary": "/**\n * Erkenntnis prüfen — 6-Schritt-Wizard.\n * Steps: 1) Erkenntnis wählen → 2) Belege ansehen & optional weiteren Beleg hinzufügen → 3) Prüfung & Schlussfolgerung\n *        → 4) Stufe & Prüftermine → 5) Widerspruch dokumentieren (optional) → 6) Prüfen & speichern.\n * Reads: erkenntnisse, belege, beobachtungen. Writes: erkenntnisse (update), belege (create, optional).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/erkenntnis-freigeben-regel-ableiten",
+      "label": "Regel aus Erkenntnis ableiten",
+      "description": "Aus einer geprüften Erkenntnis einen Regelentwurf zur Freigabe erstellen",
+      "file": "src/pages/intents/ErkenntnisFreigebenRegelAbleitenPage.tsx",
+      "summary": "/**\n * Regel aus Erkenntnis ableiten — 4-Schritt-Wizard.\n * Steps: 1) Erkenntnis der Stufe Erfahrung wählen → 2) Titel, Text, Version, Gültigkeitsbereich\n *        → 3) Ausnahme, Verantwortliche, nächste Prüfung → 4) Prüfen & als Entwurf zur Freigabe speichern.\n * Reads: erkenntnisse. Writes: regeln (create), erkenntnisse (update freigabestatus) via useErkenntnisFreigebenRegelAbleitenFlow.\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/regel-freigeben-aendern",
+      "label": "Regel freigeben oder ändern",
+      "description": "Regel freigeben, einschränken, als überholt kennzeichnen oder zurücknehmen",
+      "file": "src/pages/intents/RegelFreigebenAendernPage.tsx",
+      "summary": "/**\n * Regel freigeben oder ändern — 5-Schritt-Wizard.\n * Steps: 1) Regel wählen → 2) Neuen Freigabestatus wählen → 3) Grund angeben → 4) Gültig-ab & Prüftermin → 5) Freigebende Person → Prüfen & speichern.\n * Reads: regeln, erkenntnisse. Writes: regeln (update), erkenntnisse (update, optional).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/regel-anwenden",
+      "label": "Regel im Vorhaben anwenden",
+      "description": "Freigegebene Regel einem Vorhaben zuordnen und die Wirkung dokumentieren",
+      "file": "src/pages/intents/RegelAnwendenPage.tsx",
+      "summary": "/**\n * Regel im Vorhaben anwenden — 5-Schritt-Wizard.\n * Steps: 1) Vorhaben wählen → 2) Freigegebene Regel wählen → 3) Art der Anwendung und Ergebnis\n *        → 4) Wirkung auf Fehler, Nebenwirkungen und Bewertung → 5) Prüfen & anlegen.\n * Reads: vorhaben, regeln. Writes: regelanwendungen (via useRegelAnwendenFlow).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/pilot-bewerten",
+      "label": "Pilot bewerten",
+      "description": "Pilot bewerten und ausbauen, anpassen oder beenden entscheiden",
+      "file": "src/pages/intents/PilotBewertenPage.tsx",
+      "summary": "/**\n * Pilot bewerten — 4-Schritt-Wizard.\n * Steps: 1) Vorhaben und betroffene Regel wählen → 2) Bisherige Regelanwendungen ansehen\n *        → 3) Wirkung bewerten und Entscheidung begründen → 4) Prüfen & speichern.\n * Reads: vorhaben, regeln (Auswahl), regelanwendungen (Rückblick, über flow.port).\n * Writes: pilotbewertungen (via usePilotBewertenFlow).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    }
+  ],
+  "unregistered_pages": []
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "slug": "vorhaben-einstellen",
+      "component": "VorhabenEinstellen",
+      "title": "Neues Vorhaben einstellen",
+      "endpoints": [
+        {
+          "entity": "vorhaben",
+          "op": "create",
+          "fields": [
+            "titel",
+            "intention",
+            "startdatum",
+            "kontext",
+            "beteiligte_rollen",
+            "verwendete_systeme",
+            "informationsquellen"
+          ]
+        }
+      ]
+    }
+  ]
+}
